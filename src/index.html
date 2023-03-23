@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js-anti-spam</title>
+    <script src="js-anti-spam.js"></script>
+</head>
+
+<script type="application/javascript">
+    let publicIp = ""
+    function getIP(json) {
+        publicIp = json.ip;
+      document.write("My public IP address is: ", json.ip);
+    }
+  </script>
+  
+<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    dotest.onclick = () => {
+        const tester = new AntiSpam({ip:publicIp });
+        console.log(tester.testSpamVisit())
+    }
+  });
+</script>
+
+<body>
+    <h1>Тест</h1>
+    <button id="dotest">Выполнить</button>
+</body>
+</html>

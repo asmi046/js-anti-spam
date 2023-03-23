@@ -4,12 +4,17 @@
   "description": "AntiSpam Function",
   "main": "js-anti-spam.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp"
   },
   "keywords": [
     "js",
     "spam"
   ],
   "author": "AsmiStudio",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.27.11",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0"
+  }
 }
