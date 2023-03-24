@@ -1,6 +1,10 @@
 class AntiSpam {
     constructor(options) {
-        this.publicIp = options.ip 
+        this.publicIp = options.ip, 
+        this.region = options.region, 
+        this.country_code = options.country_code,
+        this.network = options.network,
+        this.asn = options.asn
     }
 
     testSpamVisit() {
@@ -25,6 +29,10 @@ class AntiSpam {
             userAgent: window.navigator.userAgent,
             cm_id: params["cm_id"],
             language: window.navigator.language,
+            region: this.region,
+            country_code: this.country_code,
+            network: this.network,
+            asn: this.asn,
             testResult:true,
             why:""
         }
@@ -47,10 +55,22 @@ class AntiSpam {
             result.why += "Отсутствует параметр cm_id, "
         }
         
-        // Язык не Русский
+        // Язык не Русский (Браузер)
         if (window.navigator.language !== "ru") {
             result.testResult = false
-            result.why += "Язык не Русский, "
+            result.why += "Язык не Русский (Браузер), "
+        }
+        
+        // Код страны не RU (IP)
+        if (this.country_code !== "RU") {
+            result.testResult = false
+            result.why += "Код страны не RU (IP), "
+        }
+        
+        // Регион не Moscow (IP)
+        if (this.region.indexOf("Moscow") === -1) {
+            result.testResult = false
+            result.why += "Регион не Moscow (IP), "
         }
         
         // ip не v4

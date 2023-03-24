@@ -6,22 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>js-anti-spam</title>
     <script src="js-anti-spam.js"></script>
-</head>
 
-<script type="application/javascript">
-    let publicIp = ""
-    function getIP(json) {
-        publicIp = json.ip;
-      document.write("My public IP address is: ", json.ip);
-    }
-  </script>
-  
-<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+    <meta id="publicIP" name="publicIP" content="">
+    <meta id="publicIP_region" name="publicIP_region" content="">
+    <meta id="publicIP_country_code" name="publicIP_country_code" content="">
+    <meta id="publicIP_network" name="publicIP_network" content="">
+    <meta id="publicIP_asn" name="publicIP_network" content="">
+
+</head>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    let tester = null;
+
+    fetch("https://ipapi.co/json").then(response => response.json()).then(response => {
+        document.querySelector("#publicIP").content = response.ip
+        document.querySelector("#publicIP_region").content = response.region
+        document.querySelector("#publicIP_country_code").content = response.country_code
+        document.querySelector("#publicIP_network").content = response.network
+        document.querySelector("#publicIP_asn").content = response.asn
+        
+        tester = new AntiSpam({
+            ip:document.querySelector("#publicIP").content,
+            region:document.querySelector("#publicIP_region").content,
+            country_code:document.querySelector("#publicIP_country_code").content,
+            network:document.querySelector("#publicIP_network").content,
+            asn:document.querySelector("#publicIP_asn").content,
+            ip_mascs:["123.122.0.0","46.62.64.0"]
+        });
+    })
+    
     dotest.onclick = () => {
-        const tester = new AntiSpam({ip:publicIp });
         console.log(tester.testSpamVisit())
     }
   });
