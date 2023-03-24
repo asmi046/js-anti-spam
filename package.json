@@ -5,7 +5,8 @@
   "main": "js-anti-spam.js",
   "scripts": {
     "start": "gulp",
-    "send_all_js": "scp -C src/*.js ssh u1596462@server163.hosting.reg.ru:www/fine-repair.ru/wp-content/themes/twentytwenty/js/"
+    "send_all_js": "scp -C src/*.js ssh u1596462@server163.hosting.reg.ru:www/fine-repair.ru/wp-content/themes/twentytwenty/js/",
+    "send_all_php": "scp -C php/*.* ssh u1596462@server163.hosting.reg.ru:www/fine-repair.ru/wp-content/themes/twentytwenty/template-parts/"
   },
   "keywords": [
     "js",

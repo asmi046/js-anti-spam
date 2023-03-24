@@ -1,4 +1,5 @@
-let tester = null;
+let tester = null
+const counterNumber = 87721291 //fine-repair.ru
 
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -20,8 +21,36 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     
     function messageSendet() {
-        alert("Вроде отправили!")
+        messageModalWin.classList.toggle('active');
     }
+
+    const all_phone_lnk = document.querySelectorAll("a[href^='tel:']")
+    for (let i =0; i<all_phone_lnk.length; i++) {
+        // Обработка клика по телефону
+        all_phone_lnk[i].addEventListener("mouseenter", e => {
+            
+            let testResults = tester.testSpamVisit('event');
+            console.log(testResults)
+
+            if (testResults.testResult) {
+                console.log("phone over")
+                ym(counterNumber, 'reachGoal', 'phoneIn')
+            }
+        });
+        
+        // Обработка наведения на телефону
+        all_phone_lnk[i].addEventListener("click", e => {
+            
+            let testResults = tester.testSpamVisit('event');
+            console.log(testResults)
+
+            if (testResults.testResult) {
+                console.log("phone click")
+                ym(counterNumber, 'reachGoal', 'phoneClick')
+            }
+        });
+    }
+        
 
     let allPageForm = document.querySelectorAll("form");
 
@@ -38,6 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (testResults.testResult) {
                 var formData = new FormData(allPageForm[i]);
                 
+                console.log(formData["phone"])
+
                 const formDataObj = {};
                 
                 formData.forEach((value, key) => (formDataObj[key] = value));
@@ -51,6 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (res["ok"] === true) {
                             messageSendet()
                             allPageForm[i].reset()
+                            
+                            ym(counterNumber, 'reachGoal', 'messageSend')
+
 							try {
 								ComagicWidget.sitePhoneCall({
 								    phone: fullObject.phone
