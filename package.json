@@ -4,7 +4,8 @@
   "description": "AntiSpam Function",
   "main": "js-anti-spam.js",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "send_all_js": "scp -C src/*.js ssh u1596462@server163.hosting.reg.ru:www/fine-repair.ru/wp-content/themes/twentytwenty/js/"
   },
   "keywords": [
     "js",
@@ -18,3 +19,4 @@
     "gulp-sass": "^5.1.0"
   }
 }
+

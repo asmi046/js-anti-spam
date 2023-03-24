@@ -4,10 +4,37 @@ class AntiSpam {
         this.region = options.region, 
         this.country_code = options.country_code,
         this.network = options.network,
-        this.asn = options.asn
+        this.asn = options.asn,
+        this.ip_mascs = options.ip_mascs
     }
 
-    testSpamVisit() {
+    testOneMask(masck) {
+        let splitet_masck = masck.split('.')
+        let splitet_ip = this.publicIp.split('.')
+
+        let result = true;
+
+        for(let i = 0; i<splitet_masck.length; i++) {
+            
+            if ((splitet_masck[i] != splitet_ip[i]) && (splitet_masck[i] !== "0"))
+                {
+                    return false 
+                } 
+        }
+
+        return true
+    }
+
+    testAllMasck() {
+        for (let masck in this.ip_mascs ) {
+            if (this.testOneMask(this.ip_mascs[masck])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    testSpamVisit(settings) {
 
         let params = window
             .location
@@ -49,11 +76,7 @@ class AntiSpam {
             result.why += "Пустой userAgent, "
         }
         
-        // Отсутствует параметр cm_id
-        if (params["cm_id"] == undefined) {
-            result.testResult = false
-            result.why += "Отсутствует параметр cm_id, "
-        }
+
         
         // Язык не Русский (Браузер)
         if (window.navigator.language !== "ru") {
@@ -73,17 +96,29 @@ class AntiSpam {
             result.why += "Регион не Moscow (IP), "
         }
         
-        // ip не v4
-        if ((this.publicIp.match(/\./g) || []).length !== 3) {
-            result.testResult = false
-            result.why += "ip не v4, "
+        if (settings !== "send"){
+            // Отсутствует параметр cm_id
+            if (params["cm_id"] == undefined) {
+                result.testResult = false
+                result.why += "Отсутствует параметр cm_id, "
+            }
+
+            // ip не v4
+            if ((this.publicIp.match(/\./g) || []).length !== 3) {
+                result.testResult = false
+                result.why += "ip не v4, "
+            }
         }
+        
+        
+        // ip не прошел по маске
+        if (this.ip_mascs.length != 0)
+            if (this.testAllMasck()) {
+                result.testResult = false
+                result.why += "ip не прошел по маске, "
+            }
         
 
         return result;
     }
 }
-
-// console.log(document.referrer)
-// console.log(window.navigator)
-// console.log(window.navigator.userAgent)

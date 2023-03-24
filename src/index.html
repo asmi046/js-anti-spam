@@ -5,6 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>js-anti-spam</title>
+
+    <script type="text/javascript">
+        var __cs = __cs || [];
+        __cs.push(["setCsAccount", "axGWqD749yEKbp7ik5G9eBWZaPtrQvZ8"]);
+    </script>
+    <script type="text/javascript" async src="https://app.uiscom.ru/static/cs.min.js"></script>
+	
+
+    <script src="uni_sender.js"></script>
     <script src="js-anti-spam.js"></script>
 
     <meta id="publicIP" name="publicIP" content="">
@@ -17,33 +26,39 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    let tester = null;
 
-    fetch("https://ipapi.co/json").then(response => response.json()).then(response => {
-        document.querySelector("#publicIP").content = response.ip
-        document.querySelector("#publicIP_region").content = response.region
-        document.querySelector("#publicIP_country_code").content = response.country_code
-        document.querySelector("#publicIP_network").content = response.network
-        document.querySelector("#publicIP_asn").content = response.asn
-        
-        tester = new AntiSpam({
-            ip:document.querySelector("#publicIP").content,
-            region:document.querySelector("#publicIP_region").content,
-            country_code:document.querySelector("#publicIP_country_code").content,
-            network:document.querySelector("#publicIP_network").content,
-            asn:document.querySelector("#publicIP_asn").content,
-            ip_mascs:["123.122.0.0","46.62.64.0"]
-        });
-    })
-    
     dotest.onclick = () => {
-        console.log(tester.testSpamVisit())
+        console.log(tester.testSpamVisit('send'))
     }
+
   });
 </script>
 
 <body>
+
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 320px;
+        }
+
+        form *{ 
+            margin-bottom: 10px;
+        }
+    </style>
+
     <h1>Тест</h1>
-    <button id="dotest">Выполнить</button>
+
+    <form  action="">
+        <input type="text" name="name" placeholder="Имя" value="Test">
+        <input type="tel" name="phone" placeholder="Телефон" value="+7 (903) 633-08-01">
+        <textarea name="message" placeholder="Сообщение">dfsdfff TEST</textarea>
+        <button id="testSubmitForm" type="submit">Отправить</button>
+    </form>
+
+    <hr>
+
+    <button id="dotest">Выполнить тест</button>
 </body>
 </html>
