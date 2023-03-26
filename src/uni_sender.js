@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Обработка клика по телефону
         all_phone_lnk[i].addEventListener("mouseenter", e => {
             
-            let testResults = tester.testSpamVisit('event');
+            let testResults = tester.testSpamVisit('event', 'phoneIn');
             console.log(testResults)
 
             if (testResults.testResult) {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Обработка наведения на телефону
         all_phone_lnk[i].addEventListener("click", e => {
             
-            let testResults = tester.testSpamVisit('event');
+            let testResults = tester.testSpamVisit('event', 'phoneClick');
             console.log(testResults)
 
             if (testResults.testResult) {
@@ -54,20 +54,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let allPageForm = document.querySelectorAll("form");
 
-    console.log(allPageForm)
     for (let i =0; i<allPageForm.length; i++)
         allPageForm[i].addEventListener("submit", e => {
             e.preventDefault();
             
+            var formData = new FormData(allPageForm[i]);
+
             if (tester == null) return;
+
+            let testResults = tester.testSpamVisit('send', formData.get("phone"));
             
-            let testResults = tester.testSpamVisit('send');
             console.log(testResults)
 
             if (testResults.testResult) {
-                var formData = new FormData(allPageForm[i]);
-                
-                console.log(formData["phone"])
 
                 const formDataObj = {};
                 
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					body: JSON.stringify(fullObject)
 					}).then(res => res.json()).then(res => {	
                         if (res["ok"] === true) {
-                            messageSendet()
+                            
                             allPageForm[i].reset()
                             
                             ym(counterNumber, 'reachGoal', 'messageSend')
@@ -96,8 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
 						}
 				});	
             }
-            
-            
-            
+            messageSendet();
         })
   });

@@ -1,5 +1,7 @@
 class AntiSpam {
     constructor(options) {
+        this.target = "",
+        this.target_type = "",
         this.publicIp = options.ip, 
         this.region = options.region, 
         this.country_code = options.country_code,
@@ -34,7 +36,22 @@ class AntiSpam {
         return false;
     }
 
-    testSpamVisit(settings) {
+    sendResultToServer(result) {
+        try {
+            fetch("https://api.zoola.ru/antispam_test", {
+                method: "POST",
+                body: JSON.stringify(result)
+            }).then(res => res.json()).then(res => {	
+                console.log("Result sendet")           
+                console.log(res)           
+            });
+        } catch (err) {
+                    console.log(err)
+                    console.log("ERROR: Send result to endpoin faild")
+        };
+    }
+
+    testSpamVisit(settings, target_type = "") {
 
         let params = window
             .location
@@ -51,6 +68,8 @@ class AntiSpam {
             );
 
         let result = {
+            target:settings,
+            target_type: target_type,
             publicIp: this.publicIp,
             referer: document.referrer,
             userAgent: window.navigator.userAgent,
@@ -79,7 +98,7 @@ class AntiSpam {
 
         
         // Язык не Русский (Браузер)
-        if (window.navigator.language !== "ru") {
+        if (window.navigator.language.indexOf("ru") === -1) {
             result.testResult = false
             result.why += "Язык не Русский (Браузер), "
         }
@@ -118,6 +137,8 @@ class AntiSpam {
                 result.why += "ip не прошел по маске, "
             }
         
+        
+        this.sendResultToServer(result)
 
         return result;
     }
