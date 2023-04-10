@@ -67,6 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(testResults)
 
             if (testResults.testResult) {
+                var formData = new FormData(allPageForm[i]);
+                
+                console.log(formData["phone"])
 
                 const formDataObj = {};
                 
@@ -74,27 +77,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 var fullObject = Object.assign({}, formDataObj, testResults);
                 
+                
+                try {
+                    ComagicWidget.sitePhoneCall({
+                        phone: fullObject.phone
+                    })
+                } catch (err) {
+                        console.log(err)
+                        console.log("No UIS")
+                };
+
+
+                try {
                 fetch("https://api.zoola.ru/send_order", {
 					method: "POST",
 					body: JSON.stringify(fullObject)
 					}).then(res => res.json()).then(res => {	
-                        if (res["ok"] === true) {
-                            
-                            allPageForm[i].reset()
-                            
-                            ym(counterNumber, 'reachGoal', 'messageSend')
+                        console.log(res)    
+			    	});
 
-							try {
-								ComagicWidget.sitePhoneCall({
-								    phone: fullObject.phone
-								})
-								} catch (err) {
-									console.log(err)
-									console.log("No UIS")
-							    };
-						}
-				});	
+                } catch (err) {
+                    console.log(err)
+                    console.log("No ZOLLA")
+                };
+
+                ym(counterNumber, 'reachGoal', 'messageSend')
+                allPageForm[i].reset()
             }
+
             messageSendet();
         })
   });
